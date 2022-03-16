@@ -11,70 +11,24 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : CrudController<User>
     {
         private IUsersService _service;
 
-        public UsersController(IUsersService service)
+        public UsersController(IUsersService service) : base(service)
         {
             _service = service;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{id}/resetPassword")]
+        public async Task<IActionResult> ResetPassword(int id)
         {
-            var result = await _service.ReadAsync();
-            return Ok(result);
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            var user = await _service.ReadAsync(id);
-            if(user == null)
-            {
+            if (await _service.ReadAsync(id) == null)
                 return NotFound();
-            }
-            return Ok(user);
-        }
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User entity)
-        {
-            var user = await _service.CreateAsync(entity);
+            var password = await _service.ResetPasswordAsync(id);
 
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] User entity)
-        {
-            var user = await _service.ReadAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            await _service.UpdateAsync(id, entity);
-            return NoContent();
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var user = await _service.ReadAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            await _service.DeleteAsync(id);
-            return NoContent();
-        }
+            return Ok(password);
+        } 
     }
 }

@@ -40,7 +40,9 @@ namespace WebAPI
 
             services
                 .AddSingleton<EntityFaker<User>, UserFaker>()
-                .AddSingleton<IUsersService, UsersService>();
+                .AddSingleton<EntityFaker<Product>, ProductFaker>()
+                .AddSingleton<IUsersService, UsersService>()
+                .AddSingleton<ICrudService<Product>>(serviceProvider => new CrudService<Product>(serviceProvider.GetService<EntityFaker<Product>>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
