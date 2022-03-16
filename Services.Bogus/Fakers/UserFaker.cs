@@ -11,7 +11,7 @@ namespace Services.Bogus.Fakers
     {
         public UserFaker()
         {
-            RuleFor(x => x.Login, x => x.Internet.UserName().Substring(10));
+            RuleFor(x => x.Login, x => x.Internet.UserName());
             RuleFor(x => x.Password, x => x.Internet.Password());
             RuleFor(x => x.Email, x => x.Internet.Email());
         }

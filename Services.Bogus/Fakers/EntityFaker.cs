@@ -13,7 +13,7 @@ namespace Services.Bogus.Fakers
         public EntityFaker() : base("pl")
         {
             StrictMode(true);
-            RuleFor(x => x.Id, x => x.UniqueIndex);
+            RuleFor(x => x.Id, x => x.UniqueIndex + 1);
         }
     }
 }
