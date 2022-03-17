@@ -13,6 +13,7 @@ namespace Services.Bogus
     {
         public UsersService(EntityFaker<User> faker) : base(faker)
         {
+            CreateAsync(new User() { Login = "Admin", Password = "@dmin", Roles = Roles.Create | Roles.Update | Roles.Read });
         }
 
         public Task<User> ReadByLoginAsync(string login)

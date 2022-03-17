@@ -31,6 +31,8 @@ namespace WebAPI.Services
             claims.Add(new Claim(ClaimTypes.Name, user.Login));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
+            claims.AddRange(user.Roles.ToString().Split(", ").Select(x => new Claim(ClaimTypes.Role, x)));
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor();
             tokenDescriptor.Subject = new ClaimsIdentity(claims);

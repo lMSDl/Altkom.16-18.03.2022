@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = nameof(Roles.Read))]
         public async Task<IActionResult> Get()
         {
             var result = await _service.ReadAsync();
@@ -33,6 +33,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = nameof(Roles.Read))]
         public async Task<IActionResult> Get(int id)
         {
             var entity = await _service.ReadAsync(id);
@@ -44,6 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Roles.Create))]
         public async Task<IActionResult> Post([FromBody] T entity)
         {
             if (!ModelState.IsValid)
@@ -57,6 +59,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = nameof(Roles.Update))]
         public virtual async Task<IActionResult> Put(int id, [FromBody] T entity)
         {
             if (!ModelState.IsValid)
@@ -73,6 +76,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = nameof(Roles.Delete))]
         public async Task<IActionResult> Delete(int id)
         {
             if (await _service.ReadAsync(id) == null)
