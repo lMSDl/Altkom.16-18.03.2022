@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Models;
 using Services.Interfaces;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Filters;
 using WebAPI.Services;
+using WebAPI.SignalRHubs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,11 +21,13 @@ namespace WebAPI.Controllers
     {
         private IUsersService _service;
         private AuthService _authService;
+        private IHubContext<UsersHub> _usersHub;
 
-        public UsersController(IUsersService service, AuthService authService) : base(service)
+        public UsersController(IUsersService service, AuthService authService, IHubContext<UsersHub> usersHub) : base(service)
         {
             _service = service;
             _authService = authService;
+            _usersHub = usersHub;
         }
 
         public override async Task<IActionResult> Put(int id, [FromBody] User entity)
@@ -46,6 +50,8 @@ namespace WebAPI.Controllers
                 return NotFound();
 
             var password = await _service.ResetPasswordAsync(id);
+
+            await _usersHub.Clients.Group("Admins").SendAsync("ResetPassword", await _service.ReadAsync(id));
 
             return Ok(password);
         } 

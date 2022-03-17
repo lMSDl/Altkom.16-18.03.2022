@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using WebAPI.Filters;
 using WebAPI.Handlers;
 using WebAPI.Services;
+using WebAPI.SignalRHubs;
 
 namespace WebAPI
 {
@@ -110,6 +111,8 @@ namespace WebAPI
                                                             .RequireAuthenticatedUser()
                                                             .AddRequirements(new AgeHandler(18)));
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,6 +144,7 @@ namespace WebAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<UsersHub>("signalR/Users");
                 endpoints.MapControllers();
             });
         }
