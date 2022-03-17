@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Filters;
+using WebAPI.Handlers;
 using WebAPI.Services;
 
 namespace WebAPI
@@ -94,6 +95,20 @@ namespace WebAPI
                     IssuerSigningKey = new SymmetricSecurityKey(AuthService.Key),
                     ValidateIssuerSigningKey = true
                 };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                          .RequireAuthenticatedUser();
+                    policy.RequireUserName("Admin");
+                });
+
+                options.AddPolicy("Age", policy => policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                                                            .RequireAuthenticatedUser()
+                                                            .AddRequirements(new AgeHandler(18)));
             });
         }
 

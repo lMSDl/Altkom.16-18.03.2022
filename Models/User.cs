@@ -14,5 +14,7 @@ namespace Models
         public string Email { get; set; }
 
         public Roles Roles { get; set; }
+
+        public DateTime BithDate { get; set; }
     }
 }
