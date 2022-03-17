@@ -16,7 +16,7 @@ namespace ClientConsoleApp
 
         private JsonSerializerSettings JsonSerializerSettings { get; } = new JsonSerializerSettings
         {
-            DateFormatString = "yy.MM+dd"
+            //DateFormatString = "yy.MM+dd"
         };
 
         public WebApiClient(string baseAddress)

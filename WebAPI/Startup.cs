@@ -44,7 +44,7 @@ namespace WebAPI
                 .AddNewtonsoftJson(x => {
                     x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     x.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore;
-                    x.SerializerSettings.DateFormatString = "yy.MM+dd";
+                    //x.SerializerSettings.DateFormatString = "yy.MM+dd";
                     //x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
                     //x.SerializerSettings.MaxDepth = 5;
                     x.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
@@ -56,10 +56,10 @@ namespace WebAPI
 
             //services.AddTransient<IValidator<Product>, ProductValidator>();
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
-            //});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+            });
 
             services.AddResponseCompression(options =>
             {
@@ -118,8 +118,8 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
 
             app.UseHttpsRedirection();

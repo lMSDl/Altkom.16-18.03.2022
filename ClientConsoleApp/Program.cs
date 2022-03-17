@@ -19,6 +19,10 @@ namespace ClientConsoleApp
 
             await client.LoginAsync("api/users/login", new User { Login = "Admin", Password = "@dmin" });
             users = await client.GetAsync<IEnumerable<User>>("api/users");
+
+            var swagger = new swaggerClient("https://localhost:5001/", new HttpClient());
+
+            var weatherResult = await swagger.WeatherForecastAsync();
         }
     }
 }
