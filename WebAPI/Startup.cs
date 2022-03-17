@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
+using Models.Validation;
 using Services.Bogus;
 using Services.Bogus.Fakers;
 using Services.Interfaces;
@@ -40,8 +43,12 @@ namespace WebAPI
                     //x.SerializerSettings.MaxDepth = 5;
                     x.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
                 })
-                .AddXmlSerializerFormatters();
+                .AddXmlSerializerFormatters()
+                //Rejestracja wyszstkich walidatorów z assembly zawieraj¹cego wskazany reprezentatywny walidator
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<ProductValidator>());
+                //.AddFluentValidation();
 
+            //services.AddTransient<IValidator<Product>, ProductValidator>();
 
             //services.AddSwaggerGen(c =>
             //{

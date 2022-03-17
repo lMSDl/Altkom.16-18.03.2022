@@ -20,6 +20,18 @@ namespace WebAPI.Controllers
             _service = service;
         }
 
+        public override async Task<IActionResult> Put(int id, [FromBody] User entity)
+        {
+            var user = await _service.ReadAsync(id);
+            if(user?.Password == entity.Password)
+            {
+                ModelState.AddModelError(nameof(Models.User.Password), "Hasło nie może być takie samo jak poprzednie");
+                //return BadRequest(ModelState);
+            }
+
+            return await base.Put(id, entity);
+        }
+
         [HttpGet("{id}/resetPassword")]
         public async Task<IActionResult> ResetPassword(int id)
         {

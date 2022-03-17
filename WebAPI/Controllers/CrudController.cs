@@ -43,14 +43,24 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] T entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             entity = await _service.CreateAsync(entity);
 
             return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] T entity)
+        public virtual async Task<IActionResult> Put(int id, [FromBody] T entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (await _service.ReadAsync(id) == null)
             {
                 return NotFound();
