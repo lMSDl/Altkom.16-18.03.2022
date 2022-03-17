@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Filters;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebAPI.Controllers
 {
+    //[ServiceFilter(typeof(LimitAsyncFilter))]
     public class UsersController : CrudController<User>
     {
         private IUsersService _service;
@@ -32,6 +34,7 @@ namespace WebAPI.Controllers
             return await base.Put(id, entity);
         }
 
+        [ServiceFilter(typeof(LimitAsyncFilter))]
         [HttpGet("{id}/resetPassword")]
         public async Task<IActionResult> ResetPassword(int id)
         {

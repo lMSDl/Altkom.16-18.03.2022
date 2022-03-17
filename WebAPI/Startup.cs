@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Filters;
 
 namespace WebAPI
 {
@@ -70,6 +71,9 @@ namespace WebAPI
                 .AddSingleton<EntityFaker<Product>, ProductFaker>()
                 .AddSingleton<IUsersService, UsersService>()
                 .AddSingleton<ICrudService<Product>>(serviceProvider => new CrudService<Product>(serviceProvider.GetService<EntityFaker<Product>>()));
+
+            services.AddScoped<ConsoleLogFilter>()
+                .AddSingleton(x => new LimitAsyncFilter(2));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +92,13 @@ namespace WebAPI
             app.UseRouting();
 
             app.UseResponseCompression();
+
+            //app.Use(async (context, next) =>
+            //{
+
+            //    await next();
+            //    Console.WriteLine($"{DateTime.Now}: {context.Request.Host}{context.Request.Path} - StatusCode {context.Response.StatusCode}");
+            //});
 
             app.UseAuthorization();
 
