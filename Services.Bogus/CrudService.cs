@@ -10,7 +10,7 @@ namespace Services.Bogus
 {
     public class CrudService<T> : ICrudService<T> where T : Entity
     {
-        private ICollection<T> _entities;
+        protected ICollection<T> _entities;
 
         public CrudService(EntityFaker<T> faker)
         {

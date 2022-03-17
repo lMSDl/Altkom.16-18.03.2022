@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Interfaces;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Filters;
+using WebAPI.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,10 +18,12 @@ namespace WebAPI.Controllers
     public class UsersController : CrudController<User>
     {
         private IUsersService _service;
+        private AuthService _authService;
 
-        public UsersController(IUsersService service) : base(service)
+        public UsersController(IUsersService service, AuthService authService) : base(service)
         {
             _service = service;
+            _authService = authService;
         }
 
         public override async Task<IActionResult> Put(int id, [FromBody] User entity)
@@ -45,5 +49,15 @@ namespace WebAPI.Controllers
 
             return Ok(password);
         } 
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] User user)
+        {
+            var token = await _authService.AuthenticateAsync(user.Login, user.Password);
+            if (token == null)
+                return BadRequest();
+            return Ok(token);
+        }
     }
 }

@@ -15,6 +15,11 @@ namespace Services.Bogus
         {
         }
 
+        public Task<User> ReadByLoginAsync(string login)
+        {
+            return Task.FromResult(_entities.SingleOrDefault(x => x.Login == login));
+        }
+
         public async Task<string> ResetPasswordAsync(int id)
         {
             var user = await ReadAsync(id);

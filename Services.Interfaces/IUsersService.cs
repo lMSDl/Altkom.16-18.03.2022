@@ -9,6 +9,7 @@ namespace Services.Interfaces
 {
     public interface IUsersService : ICrudService<User>
     {
+        public Task<User> ReadByLoginAsync(string login);
         public Task<string> ResetPasswordAsync(int id);
     }
 }
