@@ -19,25 +19,24 @@ namespace ClientConsoleApp
 
             //await TestSignalR();
 
-            // await TestUnraryGrpc();
+             await TestUnraryGrpc();
 
-            var channel = GrpcChannel.ForAddress("https://localhost:5001");
-            var client = new GrpcService.Services.GrpcStream.GrpcStreamClient(channel);
+            //var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            //var client = new GrpcService.Services.GrpcStream.GrpcStreamClient(channel);
 
-            var stream = client.FromServer(new Request { Text = "Hello!" });
-
-            var source = new CancellationTokenSource();
-            var counter = 0;
-            while(await stream.ResponseStream.MoveNext(source.Token))
-            {
-                Console.WriteLine( $"{counter} {stream.ResponseStream.Current.Text}");
-                counter++;
-                if (counter == 1000)
-                {
-                    //source.Cancel();
-                    break;
-                }
-            }
+            //var stream = client.FromServer(new Request { Text = "Hello!" }, deadline: DateTime.UtcNow.AddSeconds(5));
+            //var source = new CancellationTokenSource();
+            //var counter = 0;
+            //while(await stream.ResponseStream.MoveNext(source.Token))
+            //{
+            //    Console.WriteLine( $"{counter} {stream.ResponseStream.Current.Text}");
+            //    counter++;
+            //    if (counter == 10000)
+            //    {
+            //        source.Cancel();
+            //        break;
+            //    }
+            //}
         }
 
         private static async Task TestUnraryGrpc()
@@ -47,9 +46,9 @@ namespace ClientConsoleApp
             var grpcUser = new GrpcService.Services.User() { Login = "Grpc", Password = "Service", BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow) };
             var response = await client.CreateAsync(grpcUser);
 
-            var users = await client.ReadAsync(new None());
+            var user = await client.ReadByIdAsync(new GrpcService.Services.User() { Id = 0});
 
-            Console.WriteLine(JsonConvert.SerializeObject(users));
+            Console.WriteLine(JsonConvert.SerializeObject(user));
 
             //var request = new GrpcService.HelloRequest() { ClientName = "GrpcClient", Message = "Hi!" };
             //var response = await client.SayHelloAsync(request);

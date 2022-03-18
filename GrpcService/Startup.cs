@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using GrpcService.AutoMapper;
 using GrpcService.Services;
+using GrpcService.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +29,7 @@ namespace GrpcService
                 .AddSingleton<EntityFaker<Models.User>, UserFaker>()
                 .AddSingleton<IUsersService, UsersService>();
             services.AddSingleton(new MapperConfiguration(x => x.AddProfile<UserMappingProfile>()).CreateMapper());
+            services.AddScoped<IValidator<User>, UsersValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
