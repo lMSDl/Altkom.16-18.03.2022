@@ -40,11 +40,7 @@ namespace GrpcService.Services
         {
             var users = await _service.ReadAsync();
             var response = new Users();
-                response.Collection.AddRange(users.Select(x =>
-                {
-                    x.BirthDate = x.BirthDate.ToUniversalTime();
-                    return _mapper.Map<User>(x);
-                }));
+                response.Collection.AddRange(_mapper.Map<IEnumerable<User>>(users));
             return response;
         }
 

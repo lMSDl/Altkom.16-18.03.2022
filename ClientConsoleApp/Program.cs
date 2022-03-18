@@ -46,9 +46,9 @@ namespace ClientConsoleApp
             var grpcUser = new GrpcService.Services.User() { Login = "Grpc", Password = "Service", BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow) };
             var response = await client.CreateAsync(grpcUser);
 
-            var user = await client.ReadByIdAsync(new GrpcService.Services.User() { Id = 0});
+            var users = await client.ReadAsync(new None());
 
-            Console.WriteLine(JsonConvert.SerializeObject(user));
+            Console.WriteLine(JsonConvert.SerializeObject(users));
 
             //var request = new GrpcService.HelloRequest() { ClientName = "GrpcClient", Message = "Hi!" };
             //var response = await client.SayHelloAsync(request);
