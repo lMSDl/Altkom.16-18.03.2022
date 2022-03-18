@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Grpc.Net.Client;
+using GrpcService.Services;
+using Microsoft.AspNetCore.SignalR.Client;
 using Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -13,10 +16,30 @@ namespace ClientConsoleApp
         {
             //await TestWebAPI();
 
+            //await TestSignalR();
+
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            var client = new GrpcService.Services.GrpcUsers.GrpcUsersClient(channel);
+            var grpcUser = new GrpcService.Services.User() { Login = "Grpc", Password = "Service", BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow) };
+            var response = await client.CreateAsync(grpcUser);
+
+            var users = await client.ReadAsync(new None());
+
+            Console.WriteLine(JsonConvert.SerializeObject(users));
+
+            //var request = new GrpcService.HelloRequest() { ClientName = "GrpcClient", Message = "Hi!" };
+            //var response = await client.SayHelloAsync(request);
+            //Console.WriteLine(response.Message);
+
+
+        }
+
+        private static async Task TestSignalR()
+        {
             var connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:5001/signalR/users")
-                .WithAutomaticReconnect()
-                .Build();
+                            .WithUrl("https://localhost:5001/signalR/users")
+                            .WithAutomaticReconnect()
+                            .Build();
 
             connection.Reconnecting += connectionId =>
             {
@@ -56,7 +79,6 @@ namespace ClientConsoleApp
             Console.ReadLine();
 
             await connection.DisposeAsync();
-
         }
 
         private static async Task TestWebAPI()

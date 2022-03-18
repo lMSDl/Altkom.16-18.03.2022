@@ -15,7 +15,7 @@ namespace Services.Bogus.Fakers
             RuleFor(x => x.Password, x => x.Internet.Password());
             RuleFor(x => x.Email, x => x.Internet.Email());
             RuleFor(x => x.Roles, x => x.PickRandom(Enum.GetValues<Roles>(), x.Random.Int(1, 4)).Aggregate((a, b) => a | b));
-            RuleFor(x => x.BithDate, x => x.Person.DateOfBirth);
+            RuleFor(x => x.BirthDate, x => x.Person.DateOfBirth.ToUniversalTime());
         }
     }
 }

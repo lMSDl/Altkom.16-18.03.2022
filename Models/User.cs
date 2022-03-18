@@ -15,6 +15,6 @@ namespace Models
 
         public Roles Roles { get; set; }
 
-        public DateTime BithDate { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }
